@@ -53,7 +53,6 @@ for y in range(0,img.height-dicesize,dicesize):
                 thisColor = img.getpixel((x+dicex,y+dicey))
                 thisSectorColor+=thisColor
         thisSectorColor/=(dicesize**2)
-        nimd.rectangle([(x, y), (x+dicesize, y+dicesize)], thisSectorColor)
         diceNumber = int((255-thisSectorColor)*6.0/255+1)
         box=(x,y,x+dicesize,y+dicesize)
         if diceNumber==1:
@@ -73,11 +72,8 @@ for y in range(0,img.height-dicesize,dicesize):
         print (img.width,img.height)
         print(str((y+1)*100/img.height)+"%")
         total+=1
-    #     print diceNumber ,
-    # print
 
 nimdd.show()
 nimdd.save("./dicesImage","JPEG")
 print total
 
-# nim.show()
