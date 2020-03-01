@@ -69,6 +69,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowIcon(QtGui.QIcon('1.png'))
         self.Browse.setText(_translate("MainWindow", "Browse"))
         self.edt_scale.setText('خالی')
+        self.edt_file.setText('خالی')
         self.label_2.setText(_translate("MainWindow", "File:"))
         self.label_3.setText(_translate("MainWindow", "total dice:"))
         self.label_11.setText(_translate("MainWindow", "scale:"))
@@ -82,6 +83,7 @@ class Ui_MainWindow(object):
             self.edt_file.setText(fileName)
     def convert(self):
         self.progressBar.setEnabled(True)
+        self.label_11.setEnabled(True)
         import sys
         try:
             from PIL import Image ,ImageOps ,ImageDraw
@@ -97,10 +99,10 @@ class Ui_MainWindow(object):
             self.getfile()
             while not img:
                 try:
-                    print('in')
                     img = Image.open(self.edt_file.text())
                 except (FileNotFoundError,AttributeError):
                     self.getfile()
+        self.img_name = img.filename.split('/')[-1]
         d1 = Image.open('./1.png')
         d2= Image.open('./2.png')
         d3 = Image.open('./3.png')
@@ -173,13 +175,17 @@ class Ui_MainWindow(object):
         self.progressBar.setValue(100)
         self.total_dice.setText(str(total))
         print(f'total dice "{total}"')
-        nimdd.save("./dicesImage.jpg","JPEG")
+        nimdd.save(self.img_name,"JPEG")
         qmb = QtWidgets.QMessageBox()
         qmb.setText(f'تبدیل عکس شما به پایان رسید. آیا مایل به تبدیل عکس دیگری هستید؟')
         qmb.setStandardButtons(QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
         qmb.setIcon(QtWidgets.QMessageBox.Warning)
         result = qmb.exec_()
         if result == QtWidgets.QMessageBox.Yes:
+            self.progressBar.setValue(0)
+            self.total_dice.setText('0')
+            self.edt_file.setText('خالی')
+            self.edt_scale.setText('خالی')
             return 0
 
         sys.exit(0)
