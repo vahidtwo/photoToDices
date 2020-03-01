@@ -103,12 +103,12 @@ class Ui_MainWindow(object):
                 except (FileNotFoundError,AttributeError):
                     self.getfile()
         self.img_name = img.filename.split('/')[-1]
-        d1 = Image.open('./1.png')
-        d2= Image.open('./2.png')
-        d3 = Image.open('./3.png')
-        d4 = Image.open('./4.png')
-        d5 = Image.open('./5.png')
-        d6 = Image.open('./6.png')
+        d1 = Image.open('./dice/1.jpg')
+        d2= Image.open('./dice/2.jpg')
+        d3 = Image.open('./dice/3.jpg')
+        d4 = Image.open('./dice/4.jpg')
+        d5 = Image.open('./dice/5.jpg')
+        d6 = Image.open('./dice/6.jpg')
         dicew =300
         dicesize = int(img.width*1.0/dicew)
         if dicesize < 20 :
@@ -116,7 +116,7 @@ class Ui_MainWindow(object):
         print(f'diseSize "{dicesize}"')
         dices= [d1,d2,d3,d4,d5,d6]
         for i in range(0,len(dices)):
-            dices[i]=dices[i].resize((dicesize,dicesize))
+            dices[i]=dices[i].resize((dicesize,dicesize),Image.ANTIALIAS)
             dices[i].save("./temp/"+str(i)+".temp","JPEG")
         img = ImageOps.grayscale(img)
         img = ImageOps.equalize(img)
