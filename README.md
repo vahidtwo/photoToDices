@@ -3,16 +3,23 @@
 convert photo to Dices
 
 ### Using
-
-just run it 
+1-create a virtualenv 
 ```
-python photoToDices {photo full path}
+python3 -m venv .venv
 ```
+2-activate the virtualenv
+```
+. ./.venv/bin/activate
+```
+3-install requirment
+```
+pip install -r requrment.txt
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
+```
+4- run it :)
+```
+python app.py
+```
 
 ## License
 
