@@ -20,7 +20,8 @@ pip install -r requrment.txt
 ```
 python app.py
 ```
-
+![sample](./img.jpg)
+contain more than 3M dices
 ## License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT) 
