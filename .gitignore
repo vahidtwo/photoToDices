@@ -5,6 +5,8 @@ __pycache__/
 .vscode/
 # C extensions
 *.so
+.config.py
+telegramtxt.txt
 dicesImage.jpg
 temp/
 *temp.jpg
