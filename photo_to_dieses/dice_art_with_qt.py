@@ -104,7 +104,6 @@ class Ui_MainWindow(object):
 
     def update_progress(self, progress):
         self.progressBar.setValue(progress)
-        self.total += 1
         self.total_dice.setText(str(self.total))
 
     def convert(self):
@@ -198,6 +197,7 @@ class Ui_MainWindow(object):
                     nimdd.paste(dices[4], box)
                 elif diceNumber == 6:
                     nimdd.paste(dices[5], box)
+                self.total += 1
                 threading.Thread(target=self.update_progress, args=(int((y + 1) * 100 / img.height) + 1,)).start()
 
         self.progressBar.setValue(100)
