@@ -39,3 +39,24 @@ photo2dice = "photo_to_dieses.dice_art_with_qt:main"
 
 [tool.poetry.scripts]
 photo2dice = "photo_to_dieses.dice_art_with_qt:main"
+
+[project]
+classifiers = [
+    "Intended Audience :: Imange Processing",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Imange",
+    "Topic :: Software Development :: Libraries :: Imange Application",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
