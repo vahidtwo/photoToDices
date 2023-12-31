@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "phototodices"
+version = "0.1.2"
+description = "create a photo to dices"
+authors = ["vahidtwo <vahidtwo@gmail.com>"]
+readme = "README.md"
+packages = [
+  {include = "photo_to_dieses"}
+]
+[tool.poetry.dependencies]
+python = "^3.11"
+PyQt5="5.15.10"
+PyQt5-Qt5="5.15.2"
+PyQt5-sip="12.13.0"
+pillow = "^10.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = '*'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+preview = true
+
+[tool.coverage.report]
+skip_empty = true
+
+
+[project.scripts]
+photo2dice = "photo_to_dieses.dice_art_with_qt:main"
+
+[tool.poetry.scripts]
+photo2dice = "photo_to_dieses.dice_art_with_qt:main"
