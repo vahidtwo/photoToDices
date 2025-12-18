@@ -1,7 +1,11 @@
 import sys
 from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QMainWindow, QApplication, QStyleFactory
+from PyQt5.QtWidgets import (
+    QFileDialog, QMessageBox, QMainWindow, QApplication, QStyleFactory,
+    QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout, QLineEdit,
+    QPushButton, QLabel, QSpinBox, QProgressBar, QGroupBox, QSpacerItem, QSizePolicy, QAction
+)
 
 from photo_to_dices.art_generator import ArtGenerator
 
@@ -18,7 +22,6 @@ class ConversionWorker(QtCore.QThread):
 
     def run(self):
         try:
-            # DEFAULT_DICE_WIDTH from ArtGenerator is used here
             output_path, total_dice = self.art_generator.convert_to_dice_art(
                 self.image_path, self.scale, self.art_generator.DEFAULT_DICE_WIDTH, self.progress.emit
             )
@@ -33,8 +36,8 @@ class DiceArtApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Photo to Dice Art Generator")
-        self.setWindowIcon(QtGui.QIcon("icon.png")) # Ensure 'icon.png' exists
-        self.setMinimumSize(600, 400)
+        self.setWindowIcon(QtGui.QIcon("icon.png")) # Ensure 'icon.png' exists in project root
+        self.setMinimumSize(650, 450)
         self.central_widget = QtWidgets.QWidget()
         self.setCentralWidget(self.central_widget)
 
@@ -42,145 +45,174 @@ class DiceArtApp(QMainWindow):
         self.apply_dark_style()
         
     def init_ui(self):
-        main_layout = QtWidgets.QVBoxLayout(self.central_widget)
-        main_layout.setContentsMargins(25, 25, 25, 25)
-        main_layout.setSpacing(20)
+        main_layout = QVBoxLayout(self.central_widget)
+        main_layout.setContentsMargins(30, 30, 30, 30)
+        main_layout.setSpacing(25)
 
-        # Title
-        title_label = QtWidgets.QLabel("<h1>🎲 Photo to Dice Art 🖼️</h1>")
-        title_label.setAlignment(QtCore.Qt.AlignCenter)
-        main_layout.addWidget(title_label)
+        # Title Section
+        title_section = QHBoxLayout()
+        icon_label = QLabel()
+        pixmap = QtGui.QPixmap("icon.png") # Load icon
+        if not pixmap.isNull():
+            icon_label.setPixmap(pixmap.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        
+        app_title = QLabel("<h1>Photo to Dice Art</h1>")
+        app_title.setAlignment(QtCore.Qt.AlignCenter)
+        
+        title_section.addStretch()
+        title_section.addWidget(icon_label)
+        title_section.addWidget(app_title)
+        title_section.addStretch()
+        main_layout.addLayout(title_section)
 
-        # File selection
-        file_selection_group = QtWidgets.QGroupBox("Image Selection")
-        file_layout = QtWidgets.QHBoxLayout(file_selection_group)
-        self.file_input = QtWidgets.QLineEdit()
-        self.file_input.setPlaceholderText("No image selected...")
+        # File Selection Group
+        file_group = QGroupBox("Input Image")
+        file_layout = QFormLayout(file_group)
+        self.file_input = QLineEdit()
+        self.file_input.setPlaceholderText("Select an image file...")
         self.file_input.setReadOnly(True)
-        self.browse_button = QtWidgets.QPushButton("Browse")
-        self.browse_button.setIcon(QtGui.QIcon.fromTheme("folder-open")) # System icon
         
-        file_layout.addWidget(self.file_input)
-        file_layout.addWidget(self.browse_button)
-        main_layout.addWidget(file_selection_group)
+        browse_action = QAction(self)
+        browse_action.setIcon(QtGui.QIcon.fromTheme("document-open")) # Use a system icon
+        browse_action.triggered.connect(self.browse_for_file)
+        self.file_input.addAction(browse_action, QLineEdit.TrailingPosition)
+        
+        file_layout.addRow("Image Path:", self.file_input)
+        main_layout.addWidget(file_group)
 
-        # Options
-        options_group = QtWidgets.QGroupBox("Conversion Options")
-        options_layout = QtWidgets.QFormLayout(options_group)
-        
-        self.scale_label = QtWidgets.QLabel("Output Scale Factor:")
-        self.scale_spinbox = QtWidgets.QSpinBox()
+        # Options Group
+        options_group = QGroupBox("Conversion Settings")
+        options_layout = QFormLayout(options_group)
+        self.scale_spinbox = QSpinBox()
         self.scale_spinbox.setRange(1, 10)
         self.scale_spinbox.setValue(1)
         self.scale_spinbox.setSuffix("x")
-        self.scale_spinbox.setToolTip("Scales the output image size relative to the input.")
-        
-        options_layout.addRow(self.scale_label, self.scale_spinbox)
+        self.scale_spinbox.setToolTip("Sets the scaling factor for the output dice art.")
+        options_layout.addRow("Output Scale:", self.scale_spinbox)
         main_layout.addWidget(options_group)
 
         # Action Button
-        self.generate_button = QtWidgets.QPushButton("✨ Generate Dice Art ✨")
-        self.generate_button.setFixedHeight(50)
+        self.generate_button = QPushButton("✨ Generate Dice Art")
+        self.generate_button.setFixedHeight(55)
         main_layout.addWidget(self.generate_button)
 
-        # Progress Bar
-        self.progress_bar = QtWidgets.QProgressBar()
+        # Progress & Status
+        self.progress_bar = QProgressBar()
         self.progress_bar.setAlignment(QtCore.Qt.AlignCenter)
         self.progress_bar.setTextVisible(True)
         main_layout.addWidget(self.progress_bar)
         
-        main_layout.addStretch() # Pushes everything to the top
+        self.status_label = QLabel("Ready to convert!")
+        self.status_label.setAlignment(QtCore.Qt.AlignCenter)
+        main_layout.addWidget(self.status_label)
 
-        # Status Bar
-        self.status_bar = self.statusBar()
-        self.status_bar.showMessage("Ready to convert!", 0)
+        main_layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
         # Connections
-        self.browse_button.clicked.connect(self.browse_for_file)
         self.generate_button.clicked.connect(self.start_conversion)
+        
+        # Initial state
+        self.reset_ui_state()
 
     def apply_dark_style(self):
-        # Set a dark theme stylesheet
+        QApplication.setStyle(QStyleFactory.create("Fusion"))
         self.setStyleSheet("""
             QMainWindow {
-                background-color: #2b2b2b;
-                color: #f0f0f0;
+                background-color: #2c3e50; /* Deep blue-gray */
+                color: #ecf0f1; /* Light gray text */
             }
             QWidget {
-                background-color: #2b2b2b;
-                color: #f0f0f0;
-                font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+                font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
                 font-size: 10pt;
+                color: #ecf0f1;
             }
             h1 {
-                color: #a8dadc;
+                color: #3498db; /* Bright blue accent */
+                font-size: 24pt;
+                font-weight: bold;
+                margin-bottom: 10px;
             }
             QGroupBox {
-                background-color: #3c3c3c;
-                border: 1px solid #555;
+                background-color: #34495e; /* Slightly lighter blue-gray for groups */
+                border: 1px solid #3498db; /* Accent border */
                 border-radius: 8px;
                 margin-top: 15px;
-                padding-top: 20px;
-                color: #f0f0f0;
+                padding-top: 25px;
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
-                subcontrol-position: top left;
-                left: 10px;
-                padding: 0 5px;
-                color: #a8dadc;
-                font-size: 11pt;
+                subcontrol-position: top center; /* Center title */
+                padding: 0 10px;
+                color: #3498db;
+                font-size: 12pt;
                 font-weight: bold;
             }
             QLineEdit, QSpinBox {
-                background-color: #4c4c4c;
-                color: #f0f0f0;
-                border: 1px solid #666;
+                background-color: #4a6480; /* Darker input fields */
+                color: #ecf0f1;
+                border: 1px solid #3498db;
                 border-radius: 5px;
-                padding: 6px;
+                padding: 8px;
             }
             QLineEdit:read-only {
-                background-color: #3a3a3a;
-                color: #b0b0b0;
+                background-color: #4a6480;
+                color: #bdc3c7; /* Muted text for read-only */
             }
             QPushButton {
-                background-color: #a8dadc; /* Accent color */
-                color: #2b2b2b;
+                background-color: #3498db; /* Primary accent */
+                color: white;
                 border: none;
                 border-radius: 8px;
-                padding: 10px 15px;
-                font-size: 11pt;
+                padding: 12px 20px;
+                font-size: 12pt;
                 font-weight: bold;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
             }
             QPushButton:hover {
-                background-color: #8bb7b9; /* Darker accent on hover */
+                background-color: #2980b9; /* Darker blue on hover */
             }
             QPushButton:pressed {
-                background-color: #6a9799; /* Even darker on press */
+                background-color: #2471a3; /* Even darker on press */
             }
             QPushButton:disabled {
-                background-color: #555;
-                color: #999;
+                background-color: #7f8c8d; /* Greyed out for disabled */
+                color: #bdc3c7;
             }
             QProgressBar {
-                border: 1px solid #a8dadc;
+                border: 1px solid #3498db;
                 border-radius: 7px;
-                background-color: #4c4c4c;
+                background-color: #4a6480;
                 text-align: center;
-                color: #f0f0f0;
+                color: #ecf0f1;
             }
             QProgressBar::chunk {
-                background-color: #a8dadc;
+                background-color: #3498db;
                 border-radius: 6px;
             }
-            QStatusBar {
-                background-color: #3c3c3c;
-                color: #f0f0f0;
-                border-top: 1px solid #555;
+            QLabel#status_label { /* Targeting status label specifically */
+                font-size: 10pt;
+                color: #bdc3c7;
+                margin-top: 10px;
+            }
+            QMessageBox {
+                background-color: #2c3e50;
+                color: #ecf0f1;
+            }
+            QMessageBox QLabel {
+                color: #ecf0f1;
+            }
+            QMessageBox QPushButton {
+                background-color: #3498db;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 8px 15px;
+            }
+            QMessageBox QPushButton:hover {
+                background-color: #2980b9;
             }
         """)
+        self.status_label.setObjectName("status_label") # for specific styling
 
     def browse_for_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -192,12 +224,12 @@ class DiceArtApp(QMainWindow):
     def start_conversion(self):
         image_path = self.file_input.text()
         if not Path(image_path).is_file():
-            self.show_message("Error", "Please select a valid image file before generating art.", QMessageBox.Critical)
+            self.show_message("Input Error", "Please select a valid image file before generating art.", QMessageBox.Warning)
             return
 
         self.set_ui_enabled(False)
         self.progress_bar.setValue(0)
-        self.status_bar.showMessage("Generating your dice art... This might take a moment.", 0)
+        self.status_label.setText("Generating your dice art... This might take a moment.")
 
         self.worker = ConversionWorker(image_path, self.scale_spinbox.value())
         self.worker.progress.connect(self.update_progress)
@@ -211,7 +243,7 @@ class DiceArtApp(QMainWindow):
     def conversion_finished(self, output_path, total_dice):
         self.set_ui_enabled(True)
         self.progress_bar.setValue(100)
-        self.status_bar.showMessage(f"Dice art generated! Used {total_dice} dice.", 5000)
+        self.status_label.setText(f"Dice art generated! Used {total_dice} dice.")
         self.show_message(
             "Conversion Complete",
             f"Your awesome dice art has been saved to:\n{output_path}",
@@ -221,12 +253,12 @@ class DiceArtApp(QMainWindow):
 
     def conversion_error(self, error_message):
         self.set_ui_enabled(True)
-        self.status_bar.showMessage("Conversion failed!", 5000)
+        self.status_label.setText("Conversion failed!")
         self.show_message("Conversion Error", f"An error occurred: {error_message}", QMessageBox.Critical)
 
     def set_ui_enabled(self, enabled):
         self.file_input.setEnabled(enabled)
-        self.browse_button.setEnabled(enabled)
+        # self.browse_button is integrated into file_input as an action
         self.scale_spinbox.setEnabled(enabled)
         self.generate_button.setEnabled(enabled)
 
@@ -234,37 +266,36 @@ class DiceArtApp(QMainWindow):
         self.file_input.clear()
         self.scale_spinbox.setValue(1)
         self.progress_bar.setValue(0)
-        self.status_bar.clearMessage()
-        self.status_bar.showMessage("Ready to convert!", 0)
+        self.status_label.setText("Ready to convert!")
 
     def show_message(self, title, message, icon=QMessageBox.Information):
         msg_box = QMessageBox(self)
         msg_box.setWindowTitle(title)
         msg_box.setText(message)
         msg_box.setIcon(icon)
+        # Apply custom stylesheet for message box
         msg_box.setStyleSheet("""
             QMessageBox {
-                background-color: #3c3c3c;
-                color: #f0f0f0;
+                background-color: #2c3e50;
+                color: #ecf0f1;
             }
             QMessageBox QLabel {
-                color: #f0f0f0;
+                color: #ecf0f1;
             }
             QPushButton {
-                background-color: #007bff;
+                background-color: #3498db;
                 color: white;
                 border: none;
                 border-radius: 5px;
                 padding: 8px 15px;
             }
             QPushButton:hover {
-                background-color: #0056b3;
+                background-color: #2980b9;
             }
         """)
         msg_box.exec_()
 
 def main():
-    # Set Fusion style for a more modern base look across platforms
     QApplication.setStyle(QStyleFactory.create("Fusion"))
     app = QApplication(sys.argv)
     window = DiceArtApp()
