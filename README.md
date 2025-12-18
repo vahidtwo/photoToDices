@@ -2,10 +2,8 @@
 
 convert photo to Dices
 
-
 ![Python](https://img.shields.io/pypi/pyversions/phototodices?style=flat-square)
 [![Downloads](https://static.pepy.tech/badge/phototodices?style=flat-square)](https://pepy.tech/project/phototodices)
-
 
 ### Using
 

@@ -134,7 +134,8 @@ class DiceArtApp(QMainWindow):
 
     def apply_dark_style(self):
         QApplication.setStyle(QStyleFactory.create("Fusion"))
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             QMainWindow {
                 background-color: #2c3e50; /* Deep blue-gray */
                 color: #ecf0f1; /* Light gray text */
@@ -229,7 +230,8 @@ class DiceArtApp(QMainWindow):
             QMessageBox QPushButton:hover {
                 background-color: #2980b9;
             }
-        """)
+        """
+        )
         self.status_label.setObjectName("status_label")  # for specific styling
 
     def browse_for_file(self):
@@ -293,7 +295,8 @@ class DiceArtApp(QMainWindow):
         msg_box.setText(message)
         msg_box.setIcon(icon)
         # Apply custom stylesheet for message box
-        msg_box.setStyleSheet("""
+        msg_box.setStyleSheet(
+            """
             QMessageBox {
                 background-color: #2c3e50;
                 color: #ecf0f1;
@@ -311,7 +314,8 @@ class DiceArtApp(QMainWindow):
             QPushButton:hover {
                 background-color: #2980b9;
             }
-        """)
+        """
+        )
         msg_box.exec_()
 
 

@@ -66,7 +66,8 @@ class CustomFileDialog(QDialog):
 
     def apply_style(self):
         # Apply a similar dark theme to the dialog itself
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             QDialog {
                 background-color: #2c3e50;
                 color: #ecf0f1;
@@ -108,7 +109,8 @@ class CustomFileDialog(QDialog):
                 background-color: #3498db;
                 color: white;
             }
-        """)
+        """
+        )
 
     def load_directory_contents(self):
         self.list_widget.clear()
