@@ -29,7 +29,7 @@ pip install -r requrment.txt
 python app.py
 ```
 
-![sample](../img.jpg)
+![sample](img.jpg)
 contain more than 3M dices
 
 ## License
