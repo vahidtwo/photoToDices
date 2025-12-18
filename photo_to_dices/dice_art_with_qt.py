@@ -211,6 +211,34 @@ class DiceArtApp(QMainWindow):
             QMessageBox QPushButton:hover {
                 background-color: #2980b9;
             }
+
+            /* Styling for QFileDialog and its children */
+            QFileDialog {
+                background-color: #2c3e50; /* Same as main window background */
+                color: #ecf0f1;
+            }
+            QFileDialog QLabel, QFileDialog QLineEdit {
+                color: #ecf0f1;
+            }
+            QFileDialog QTreeView { /* For the file list */
+                background-color: #34495e;
+                color: #ecf0f1;
+                border: 1px solid #3498db;
+                border-radius: 5px;
+                selection-background-color: #3498db;
+                selection-color: white;
+            }
+            QFileDialog QPushButton { /* Buttons inside file dialog */
+                background-color: #3498db;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 5px 10px;
+                font-size: 10pt;
+            }
+            QFileDialog QPushButton:hover {
+                background-color: #2980b9;
+            }
         """)
         self.status_label.setObjectName("status_label") # for specific styling
 
