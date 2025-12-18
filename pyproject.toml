@@ -17,18 +17,16 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">3.11"
-PyQt5 = ">5.15.10"
-PyQt5-Qt5 = ">5.15.2"
-PyQt5-sip = ">12.13.0"
-pillow = ">10.1.0"
+python = "^3.11"
+PyQt5 = "^5.15.11"
+pillow = "^12.0.0"
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = "^3.4.0"
+pre-commit = "^3.8.0"
 
 [tool.poetry.group.docs.dependencies]
-mkdocs = "^1.4.2"
-mkdocs-material = "^9.2.7"
+mkdocs = "^1.6.1"
+mkdocs-material = "^9.7.1"
 mkdocstrings = { extras = ["python"], version = "^0.23.0" }
 
 [tool.poetry.scripts]
