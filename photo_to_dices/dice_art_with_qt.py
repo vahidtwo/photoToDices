@@ -2,12 +2,13 @@ import sys
 from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import (
-    QFileDialog, QMessageBox, QMainWindow, QApplication, QStyleFactory,
-    QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout, QLineEdit,
+    QFileDialog, QMessageBox, QMainWindow, QApplication, QStyleFactory, # QFileDialog needed for filter string parsing
+    QVBoxLayout, QHBoxLayout, QFormLayout, QLineEdit,
     QPushButton, QLabel, QSpinBox, QProgressBar, QGroupBox, QSpacerItem, QSizePolicy, QAction
 )
 
 from photo_to_dices.art_generator import ArtGenerator
+from photo_to_dices.custom_file_dialog import CustomFileDialog # Import custom dialog
 
 class ConversionWorker(QtCore.QThread):
     progress = QtCore.pyqtSignal(int)
@@ -22,6 +23,7 @@ class ConversionWorker(QtCore.QThread):
 
     def run(self):
         try:
+            # DEFAULT_DICE_WIDTH from ArtGenerator is used here
             output_path, total_dice = self.art_generator.convert_to_dice_art(
                 self.image_path, self.scale, self.art_generator.DEFAULT_DICE_WIDTH, self.progress.emit
             )
@@ -211,43 +213,16 @@ class DiceArtApp(QMainWindow):
             QMessageBox QPushButton:hover {
                 background-color: #2980b9;
             }
-
-            /* Styling for QFileDialog and its children */
-            QFileDialog {
-                background-color: #2c3e50; /* Same as main window background */
-                color: #ecf0f1;
-            }
-            QFileDialog QLabel, QFileDialog QLineEdit {
-                color: #ecf0f1;
-            }
-            QFileDialog QTreeView { /* For the file list */
-                background-color: #34495e;
-                color: #ecf0f1;
-                border: 1px solid #3498db;
-                border-radius: 5px;
-                selection-background-color: #3498db;
-                selection-color: white;
-            }
-            QFileDialog QPushButton { /* Buttons inside file dialog */
-                background-color: #3498db;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                padding: 5px 10px;
-                font-size: 10pt;
-            }
-            QFileDialog QPushButton:hover {
-                background-color: #2980b9;
-            }
         """)
         self.status_label.setObjectName("status_label") # for specific styling
 
     def browse_for_file(self):
-        file_path, _ = QFileDialog.getOpenFileName(
-            self, "Select Image File", "", "Image Files (*.png *.jpg *.jpeg *.bmp *.gif)"
-        )
-        if file_path:
-            self.file_input.setText(file_path)
+        initial_path = self.file_input.text() if self.file_input.text() else str(Path.home())
+        dialog = CustomFileDialog(self, initial_path=initial_path, file_filter="*.png *.jpg *.jpeg *.bmp *.gif")
+        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+            selected_file = dialog.get_selected_file()
+            if selected_file:
+                self.file_input.setText(selected_file)
 
     def start_conversion(self):
         image_path = self.file_input.text()
