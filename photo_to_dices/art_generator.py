@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 from PIL import Image, ImageOps
+import numpy as np
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -19,7 +20,7 @@ class ArtGenerator:
         dice_images = []
         for i in range(1, 7):
             dice_path = package_directory / "dice" / f"{i}.png"
-            logging.info(f"Loading dice image: {dice_path}")
+            logging.debug(f"Loading dice image: {dice_path}") # Changed to debug
             dice_image = Image.open(dice_path)
             dice_image = dice_image.resize((dice_size, dice_size), Image.Resampling.LANCZOS)
             dice_images.append(dice_image)
@@ -52,18 +53,20 @@ class ArtGenerator:
                 Image.Resampling.LANCZOS
             )
         
+        # Convert processed image to numpy array for faster pixel access
+        processed_array = np.array(processed_image)
+
         dice_art_image = Image.new("L", (processed_image.width, processed_image.height), "white")
         logging.info("Created a new blank image for the dice art.")
 
         total_dice_count = 0
-        total_steps = (processed_image.height - dice_size) // dice_size
+        total_rows = (processed_image.height - dice_size) // dice_size
+        
         for y_step, y in enumerate(range(0, processed_image.height - dice_size, dice_size)):
             for x in range(0, processed_image.width - dice_size, dice_size):
-                sector_color_sum = 0
-                for dy in range(dice_size):
-                    for dx in range(dice_size):
-                        sector_color_sum += processed_image.getpixel((x + dx, y + dy))
-                average_sector_color = sector_color_sum / (dice_size * dice_size)
+                # Extract the current block using NumPy slicing
+                block = processed_array[y : y + dice_size, x : x + dice_size]
+                average_sector_color = np.mean(block) # Calculate mean directly
                 
                 dice_number = int((255 - average_sector_color) * 6.0 / 255 + 1)
                 dice_number = max(1, min(6, dice_number))
@@ -71,8 +74,9 @@ class ArtGenerator:
                 box = (x, y, x + dice_size, y + dice_size)
                 dice_art_image.paste(dice_faces[dice_number - 1], box)
                 total_dice_count += 1
-            if progress_callback:
-                progress = int((y_step / total_steps) * 100)
+            
+            if progress_callback and total_rows > 0: # Avoid ZeroDivisionError
+                progress = int((y_step / total_rows) * 100)
                 progress_callback(progress)
         
         if progress_callback:
