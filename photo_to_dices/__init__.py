@@ -1,0 +1,1 @@
+from .dice_art_with_qt import main
