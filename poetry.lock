@@ -1085,4 +1085,11 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
+<<<<<<< HEAD
 content-hash = "2a706750bf0b2b16306c8147b80091442bdad5eacc185440cd9eeebc4ce45105"
+||||||| parent of deb5c14 (Fix: Update dependencies to fix security vulnerabilities)
+python-versions = ">3.11"
+content-hash = "fa6a5ae03e2acec862b19bc0fd85f55503af0b2b3e3b9a969be53efa196cb436"
+=======
+content-hash = "4fd10de13d2a956718158e3001ad28b7e14c9fccb08aef5b89e87fe16fd86e51"
+>>>>>>> deb5c14 (Fix: Update dependencies to fix security vulnerabilities)
