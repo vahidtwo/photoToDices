@@ -252,6 +252,24 @@ python-dateutil = ">=2.8.1"
 dev = ["flake8", "markdown", "twine", "wheel"]
 
 [[package]]
+name = "griffe"
+version = "1.15.0"
+description = "Signatures for entire Python programs. Extract the structure, the frame, the skeleton of your project, to generate API documentation or find breaking changes in your API."
+optional = false
+python-versions = ">=3.10"
+groups = ["docs"]
+files = [
+    {file = "griffe-1.15.0-py3-none-any.whl", hash = "sha256:6f6762661949411031f5fcda9593f586e6ce8340f0ba88921a0f2ef7a81eb9a3"},
+    {file = "griffe-1.15.0.tar.gz", hash = "sha256:7726e3afd6f298fbc3696e67958803e7ac843c1cfe59734b6251a40cdbfb5eea"},
+]
+
+[package.dependencies]
+colorama = ">=0.4"
+
+[package.extras]
+pypi = ["pip (>=24.0)", "platformdirs (>=4.2)", "wheel (>=0.42)"]
+
+[[package]]
 name = "identify"
 version = "2.6.15"
 description = "File identification library for Python"
@@ -535,90 +553,23 @@ files = [
 
 [[package]]
 name = "mkdocstrings"
-<<<<<<< HEAD
-<<<<<<< HEAD
 version = "1.0.0"
-||||||| parent of be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-version = "0.23.0"
-=======
-version = "0.25.2"
->>>>>>> be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-||||||| parent of d5db005 (Fix: Update all docs dependencies to fix security vulnerability)
-version = "0.25.2"
-=======
-version = "1.0.0"
->>>>>>> d5db005 (Fix: Update all docs dependencies to fix security vulnerability)
 description = "Automatic documentation from sources, for MkDocs."
 optional = false
 python-versions = ">=3.10"
 groups = ["docs"]
 files = [
-<<<<<<< HEAD
-<<<<<<< HEAD
     {file = "mkdocstrings-1.0.0-py3-none-any.whl", hash = "sha256:4c50eb960bff6e05dfc631f6bc00dfabffbcb29c5ff25f676d64daae05ed82fa"},
     {file = "mkdocstrings-1.0.0.tar.gz", hash = "sha256:351a006dbb27aefce241ade110d3cd040c1145b7a3eb5fd5ac23f03ed67f401a"},
-||||||| parent of be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-    {file = "mkdocstrings-0.23.0-py3-none-any.whl", hash = "sha256:051fa4014dfcd9ed90254ae91de2dbb4f24e166347dae7be9a997fe16316c65e"},
-    {file = "mkdocstrings-0.23.0.tar.gz", hash = "sha256:d9c6a37ffbe7c14a7a54ef1258c70b8d394e6a33a1c80832bce40b9567138d1c"},
-=======
-    {file = "mkdocstrings-0.25.2-py3-none-any.whl", hash = "sha256:9e2cda5e2e12db8bb98d21e3410f3f27f8faab685a24b03b06ba7daa5b92abfc"},
-    {file = "mkdocstrings-0.25.2.tar.gz", hash = "sha256:5cf57ad7f61e8be3111a2458b4e49c2029c9cb35525393b179f9c916ca8042dc"},
->>>>>>> be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-||||||| parent of d5db005 (Fix: Update all docs dependencies to fix security vulnerability)
-    {file = "mkdocstrings-0.25.2-py3-none-any.whl", hash = "sha256:9e2cda5e2e12db8bb98d21e3410f3f27f8faab685a24b03b06ba7daa5b92abfc"},
-    {file = "mkdocstrings-0.25.2.tar.gz", hash = "sha256:5cf57ad7f61e8be3111a2458b4e49c2029c9cb35525393b179f9c916ca8042dc"},
-=======
-    {file = "mkdocstrings-1.0.0-py3-none-any.whl", hash = "sha256:4c50eb960bff6e05dfc631f6bc00dfabffbcb29c5ff25f676d64daae05ed82fa"},
-    {file = "mkdocstrings-1.0.0.tar.gz", hash = "sha256:351a006dbb27aefce241ade110d3cd040c1145b7a3eb5fd5ac23f03ed67f401a"},
->>>>>>> d5db005 (Fix: Update all docs dependencies to fix security vulnerability)
 ]
 
 [package.dependencies]
-<<<<<<< HEAD
-<<<<<<< HEAD
 Jinja2 = ">=3.1"
 Markdown = ">=3.6"
-||||||| parent of be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-Jinja2 = ">=2.11.1"
-Markdown = ">=3.3"
-=======
-click = ">=7.0"
-Jinja2 = ">=2.11.1"
-Markdown = ">=3.3"
->>>>>>> be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-||||||| parent of d5db005 (Fix: Update all docs dependencies to fix security vulnerability)
-click = ">=7.0"
-Jinja2 = ">=2.11.1"
-Markdown = ">=3.3"
-=======
-Jinja2 = ">=3.1"
-Markdown = ">=3.6"
->>>>>>> d5db005 (Fix: Update all docs dependencies to fix security vulnerability)
 MarkupSafe = ">=1.1"
-<<<<<<< HEAD
-<<<<<<< HEAD
-mkdocs = ">=1.6"
-mkdocs-autorefs = ">=1.4"
-||||||| parent of be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-mkdocs = ">=1.2"
-mkdocs-autorefs = ">=0.3.1"
-mkdocstrings-python = {version = ">=0.5.2", optional = true, markers = "extra == \"python\""}
-=======
-mkdocs = ">=1.4"
-mkdocs-autorefs = ">=0.3.1"
-mkdocstrings-python = {version = ">=0.5.2", optional = true, markers = "extra == \"python\""}
-platformdirs = ">=2.2.0"
->>>>>>> be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-||||||| parent of d5db005 (Fix: Update all docs dependencies to fix security vulnerability)
-mkdocs = ">=1.4"
-mkdocs-autorefs = ">=0.3.1"
-mkdocstrings-python = {version = ">=0.5.2", optional = true, markers = "extra == \"python\""}
-platformdirs = ">=2.2.0"
-=======
 mkdocs = ">=1.6"
 mkdocs-autorefs = ">=1.4"
 mkdocstrings-python = {version = ">=1.16.2", optional = true, markers = "extra == \"python\""}
->>>>>>> d5db005 (Fix: Update all docs dependencies to fix security vulnerability)
 pymdown-extensions = ">=6.3"
 
 [package.extras]
@@ -627,26 +578,6 @@ python = ["mkdocstrings-python (>=1.16.2)"]
 python-legacy = ["mkdocstrings-python-legacy (>=0.2.1)"]
 
 [[package]]
-<<<<<<< HEAD
-||||||| parent of be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-name = "mkdocstrings-python"
-version = "1.9.1"
-description = "A Python handler for mkdocstrings."
-optional = false
-python-versions = ">=3.8"
-groups = ["docs"]
-files = [
-    {file = "mkdocstrings_python-1.9.1-py3-none-any.whl", hash = "sha256:bf2406ed37ff19c9f8e0acc9d72c41953fb789bfb4ae10eb00ee17e537eeb220"},
-    {file = "mkdocstrings_python-1.9.1.tar.gz", hash = "sha256:077188fa43eab3b689826b15da7da6753501224b2482e4eca3ce4412ce3b71cb"},
-]
-
-[package.dependencies]
-griffe = ">=0.37"
-markdown = ">=3.3,<3.6"
-mkdocstrings = ">=0.20"
-
-[[package]]
-=======
 name = "mkdocstrings-python"
 version = "2.0.1"
 description = "A Python handler for mkdocstrings."
@@ -664,7 +595,6 @@ mkdocs-autorefs = ">=1.4"
 mkdocstrings = ">=0.30"
 
 [[package]]
->>>>>>> be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
 name = "nodeenv"
 version = "1.9.1"
 description = "Node.js virtual environment builder"
@@ -1237,29 +1167,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-content-hash = "2a706750bf0b2b16306c8147b80091442bdad5eacc185440cd9eeebc4ce45105"
-||||||| parent of deb5c14 (Fix: Update dependencies to fix security vulnerabilities)
-python-versions = ">3.11"
-content-hash = "fa6a5ae03e2acec862b19bc0fd85f55503af0b2b3e3b9a969be53efa196cb436"
-=======
-content-hash = "4fd10de13d2a956718158e3001ad28b7e14c9fccb08aef5b89e87fe16fd86e51"
->>>>>>> deb5c14 (Fix: Update dependencies to fix security vulnerabilities)
-||||||| parent of be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-content-hash = "4fd10de13d2a956718158e3001ad28b7e14c9fccb08aef5b89e87fe16fd86e51"
-=======
-content-hash = "a381a7839c21387098d1ba4084d8b878c9412b3fb08f2fd0b9e0f632a61bd2db"
->>>>>>> be69c6f (Fix: Update mkdocstrings to fix security vulnerability)
-||||||| parent of d5db005 (Fix: Update all docs dependencies to fix security vulnerability)
-content-hash = "a381a7839c21387098d1ba4084d8b878c9412b3fb08f2fd0b9e0f632a61bd2db"
-=======
-content-hash = "e4c0acde52b6f559494f36d2ec0fed381f64ca459032d890d26a91a3e5b48f80"
->>>>>>> d5db005 (Fix: Update all docs dependencies to fix security vulnerability)
-||||||| parent of 113fb68 (Perf: Optimize image processing using NumPy)
-content-hash = "e4c0acde52b6f559494f36d2ec0fed381f64ca459032d890d26a91a3e5b48f80"
-=======
-content-hash = "1f30d408d889d609e8ce7586babebf498b4fc36db2c9554b55b78c84743f8c1e"
->>>>>>> 113fb68 (Perf: Optimize image processing using NumPy)
+content-hash = "a0ebb3e07c27f620681ea7f05952af4370f1aed308fef74e4fec9e7fd9d76ce4"
