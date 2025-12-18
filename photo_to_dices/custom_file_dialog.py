@@ -1,6 +1,16 @@
 from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QListWidget, QListWidgetItem, QStyle
+from PyQt5.QtWidgets import (
+    QDialog,
+    QVBoxLayout,
+    QHBoxLayout,
+    QLineEdit,
+    QPushButton,
+    QListWidget,
+    QListWidgetItem,
+    QStyle,
+)
+
 
 class CustomFileDialog(QDialog):
     def __init__(self, parent=None, initial_path=None, file_filter="*"):
@@ -8,12 +18,12 @@ class CustomFileDialog(QDialog):
         self.setWindowTitle("Select Image File")
         self.setMinimumSize(600, 400)
         self.selected_file = None
-        self.file_filter = file_filter.split() # e.g., ["*.png", "*.jpg"]
+        self.file_filter = file_filter.split()  # e.g., ["*.png", "*.jpg"]
 
         self.current_path = Path(initial_path) if initial_path else Path.home()
         if not self.current_path.is_dir():
             self.current_path = self.current_path.parent
-        
+
         self.init_ui()
         self.load_directory_contents()
         self.apply_style()
@@ -27,12 +37,12 @@ class CustomFileDialog(QDialog):
         path_layout = QHBoxLayout()
         self.path_edit = QLineEdit(str(self.current_path))
         self.path_edit.setReadOnly(True)
-        
+
         self.up_button = QPushButton()
         self.up_button.setIcon(self.style().standardIcon(QStyle.SP_ArrowUp))
         self.up_button.setFixedSize(30, 30)
         self.up_button.clicked.connect(self.navigate_up)
-        
+
         path_layout.addWidget(self.path_edit)
         path_layout.addWidget(self.up_button)
         main_layout.addLayout(path_layout)
@@ -105,7 +115,7 @@ class CustomFileDialog(QDialog):
         self.path_edit.setText(str(self.current_path))
 
         # Add parent directory
-        if self.current_path.parent != self.current_path: # Avoid infinite 'up' from root
+        if self.current_path.parent != self.current_path:  # Avoid infinite 'up' from root
             item = QListWidgetItem("..")
             item.setData(QtCore.Qt.UserRole, self.current_path.parent)
             self.list_widget.addItem(item)
@@ -118,10 +128,10 @@ class CustomFileDialog(QDialog):
             elif self._is_file_match(entry):
                 item.setIcon(self.style().standardIcon(QStyle.SP_FileIcon))
             else:
-                continue # Skip files that don't match the filter
-            
+                continue  # Skip files that don't match the filter
+
             item = QListWidgetItem(item_text)
-            item.setData(QtCore.Qt.UserRole, entry) # Store the full Path object
+            item.setData(QtCore.Qt.UserRole, entry)  # Store the full Path object
             self.list_widget.addItem(item)
 
     def _is_file_match(self, file_path):
@@ -145,6 +155,6 @@ class CustomFileDialog(QDialog):
         else:
             self.selected_file = str(path_obj)
             self.accept()
-            
+
     def get_selected_file(self):
         return self.selected_file

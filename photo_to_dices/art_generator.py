@@ -4,7 +4,8 @@ from PIL import Image, ImageOps
 import numpy as np
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 
 class ArtGenerator:
     DICE_IMAGE_SIZE_THRESHOLD = 20
@@ -20,7 +21,7 @@ class ArtGenerator:
         dice_images = []
         for i in range(1, 7):
             dice_path = package_directory / "dice" / f"{i}.png"
-            logging.debug(f"Loading dice image: {dice_path}") # Changed to debug
+            logging.debug(f"Loading dice image: {dice_path}")  # Changed to debug
             dice_image = Image.open(dice_path)
             dice_image = dice_image.resize((dice_size, dice_size), Image.Resampling.LANCZOS)
             dice_images.append(dice_image)
@@ -35,7 +36,7 @@ class ArtGenerator:
             return None, None
 
         image_name = Path(image_path).name
-        
+
         dice_size = int(input_image.width / dice_width)
         if dice_size < self.DICE_IMAGE_SIZE_THRESHOLD:
             dice_size = self.DICE_IMAGE_SIZE_THRESHOLD
@@ -49,10 +50,9 @@ class ArtGenerator:
         if scale > 1:
             logging.info(f"Scaling image by a factor of {scale}")
             processed_image = processed_image.resize(
-                (processed_image.width * scale, processed_image.height * scale),
-                Image.Resampling.LANCZOS
+                (processed_image.width * scale, processed_image.height * scale), Image.Resampling.LANCZOS
             )
-        
+
         # Convert processed image to numpy array for faster pixel access
         processed_array = np.array(processed_image)
 
@@ -61,24 +61,24 @@ class ArtGenerator:
 
         total_dice_count = 0
         total_rows = (processed_image.height - dice_size) // dice_size
-        
+
         for y_step, y in enumerate(range(0, processed_image.height - dice_size, dice_size)):
             for x in range(0, processed_image.width - dice_size, dice_size):
                 # Extract the current block using NumPy slicing
                 block = processed_array[y : y + dice_size, x : x + dice_size]
-                average_sector_color = np.mean(block) # Calculate mean directly
-                
+                average_sector_color = np.mean(block)  # Calculate mean directly
+
                 dice_number = int((255 - average_sector_color) * 6.0 / 255 + 1)
                 dice_number = max(1, min(6, dice_number))
-                
+
                 box = (x, y, x + dice_size, y + dice_size)
                 dice_art_image.paste(dice_faces[dice_number - 1], box)
                 total_dice_count += 1
-            
-            if progress_callback and total_rows > 0: # Avoid ZeroDivisionError
+
+            if progress_callback and total_rows > 0:  # Avoid ZeroDivisionError
                 progress = int((y_step / total_rows) * 100)
                 progress_callback(progress)
-        
+
         if progress_callback:
             progress_callback(100)
 

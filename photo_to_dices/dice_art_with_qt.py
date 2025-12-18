@@ -2,13 +2,28 @@ import sys
 from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import (
-    QFileDialog, QMessageBox, QMainWindow, QApplication, QStyleFactory, # QFileDialog needed for filter string parsing
-    QVBoxLayout, QHBoxLayout, QFormLayout, QLineEdit,
-    QPushButton, QLabel, QSpinBox, QProgressBar, QGroupBox, QSpacerItem, QSizePolicy, QAction
+    QFileDialog,
+    QMessageBox,
+    QMainWindow,
+    QApplication,
+    QStyleFactory,  # QFileDialog needed for filter string parsing
+    QVBoxLayout,
+    QHBoxLayout,
+    QFormLayout,
+    QLineEdit,
+    QPushButton,
+    QLabel,
+    QSpinBox,
+    QProgressBar,
+    QGroupBox,
+    QSpacerItem,
+    QSizePolicy,
+    QAction,
 )
 
 from photo_to_dices.art_generator import ArtGenerator
-from photo_to_dices.custom_file_dialog import CustomFileDialog # Import custom dialog
+from photo_to_dices.custom_file_dialog import CustomFileDialog  # Import custom dialog
+
 
 class ConversionWorker(QtCore.QThread):
     progress = QtCore.pyqtSignal(int)
@@ -34,18 +49,19 @@ class ConversionWorker(QtCore.QThread):
         except Exception as e:
             self.error.emit(str(e))
 
+
 class DiceArtApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Photo to Dice Art Generator")
-        self.setWindowIcon(QtGui.QIcon("icon.png")) # Ensure 'icon.png' exists in project root
+        self.setWindowIcon(QtGui.QIcon("icon.png"))  # Ensure 'icon.png' exists in project root
         self.setMinimumSize(650, 450)
         self.central_widget = QtWidgets.QWidget()
         self.setCentralWidget(self.central_widget)
 
         self.init_ui()
         self.apply_dark_style()
-        
+
     def init_ui(self):
         main_layout = QVBoxLayout(self.central_widget)
         main_layout.setContentsMargins(30, 30, 30, 30)
@@ -54,13 +70,13 @@ class DiceArtApp(QMainWindow):
         # Title Section
         title_section = QHBoxLayout()
         icon_label = QLabel()
-        pixmap = QtGui.QPixmap("icon.png") # Load icon
+        pixmap = QtGui.QPixmap("icon.png")  # Load icon
         if not pixmap.isNull():
             icon_label.setPixmap(pixmap.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
-        
+
         app_title = QLabel("<h1>Photo to Dice Art</h1>")
         app_title.setAlignment(QtCore.Qt.AlignCenter)
-        
+
         title_section.addStretch()
         title_section.addWidget(icon_label)
         title_section.addWidget(app_title)
@@ -73,12 +89,12 @@ class DiceArtApp(QMainWindow):
         self.file_input = QLineEdit()
         self.file_input.setPlaceholderText("Select an image file...")
         self.file_input.setReadOnly(True)
-        
+
         browse_action = QAction(self)
-        browse_action.setIcon(QtGui.QIcon.fromTheme("document-open")) # Use a system icon
+        browse_action.setIcon(QtGui.QIcon.fromTheme("document-open"))  # Use a system icon
         browse_action.triggered.connect(self.browse_for_file)
         self.file_input.addAction(browse_action, QLineEdit.TrailingPosition)
-        
+
         file_layout.addRow("Image Path:", self.file_input)
         main_layout.addWidget(file_group)
 
@@ -103,7 +119,7 @@ class DiceArtApp(QMainWindow):
         self.progress_bar.setAlignment(QtCore.Qt.AlignCenter)
         self.progress_bar.setTextVisible(True)
         main_layout.addWidget(self.progress_bar)
-        
+
         self.status_label = QLabel("Ready to convert!")
         self.status_label.setAlignment(QtCore.Qt.AlignCenter)
         main_layout.addWidget(self.status_label)
@@ -112,7 +128,7 @@ class DiceArtApp(QMainWindow):
 
         # Connections
         self.generate_button.clicked.connect(self.start_conversion)
-        
+
         # Initial state
         self.reset_ui_state()
 
@@ -214,7 +230,7 @@ class DiceArtApp(QMainWindow):
                 background-color: #2980b9;
             }
         """)
-        self.status_label.setObjectName("status_label") # for specific styling
+        self.status_label.setObjectName("status_label")  # for specific styling
 
     def browse_for_file(self):
         initial_path = self.file_input.text() if self.file_input.text() else str(Path.home())
@@ -227,7 +243,9 @@ class DiceArtApp(QMainWindow):
     def start_conversion(self):
         image_path = self.file_input.text()
         if not Path(image_path).is_file():
-            self.show_message("Input Error", "Please select a valid image file before generating art.", QMessageBox.Warning)
+            self.show_message(
+                "Input Error", "Please select a valid image file before generating art.", QMessageBox.Warning
+            )
             return
 
         self.set_ui_enabled(False)
@@ -248,9 +266,7 @@ class DiceArtApp(QMainWindow):
         self.progress_bar.setValue(100)
         self.status_label.setText(f"Dice art generated! Used {total_dice} dice.")
         self.show_message(
-            "Conversion Complete",
-            f"Your awesome dice art has been saved to:\n{output_path}",
-            QMessageBox.Information
+            "Conversion Complete", f"Your awesome dice art has been saved to:\n{output_path}", QMessageBox.Information
         )
         self.reset_ui_state()
 
@@ -298,12 +314,14 @@ class DiceArtApp(QMainWindow):
         """)
         msg_box.exec_()
 
+
 def main():
     QApplication.setStyle(QStyleFactory.create("Fusion"))
     app = QApplication(sys.argv)
     window = DiceArtApp()
     window.show()
     sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
     main()
