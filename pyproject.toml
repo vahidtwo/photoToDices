@@ -22,12 +22,12 @@ PyQt5 = "^5.15.11"
 pillow = "^12.0.0"
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = "^3.8.0"
+pre-commit = "^4.5.1"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.6.1"
 mkdocs-material = "^9.7.1"
-mkdocstrings = { extras = ["python"], version = "^0.25.1" }
+mkdocstrings = "^1.0.0"
 
 [tool.poetry.scripts]
 photo2dice = "photo_to_dices.dice_art_with_qt:main"
