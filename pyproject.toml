@@ -27,7 +27,7 @@ pre-commit = "^3.8.0"
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.6.1"
 mkdocs-material = "^9.7.1"
-mkdocstrings = { extras = ["python"], version = "^0.23.0" }
+mkdocstrings = { extras = ["python"], version = "^0.25.1" }
 
 [tool.poetry.scripts]
 photo2dice = "photo_to_dices.dice_art_with_qt:main"
