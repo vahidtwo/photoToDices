@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "photo_to_dices"
-version = "0.1.3"
+version = "0.1.4"
 description = "Convert a photo to a dice-based visual representation"
 authors = ["vahidtwo <vahidtwo@gmail.com>"]
 readme = "README.md"
