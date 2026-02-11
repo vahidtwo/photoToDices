@@ -19,7 +19,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.11"
 PyQt5 = "^5.15.11"
-pillow = "^12.0.0"
+pillow = "^12.1.1"
 numpy = "^1.26.4"
 
 [tool.poetry.group.dev.dependencies]
